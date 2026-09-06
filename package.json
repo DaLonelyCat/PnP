@@ -5,7 +5,12 @@
   "type": "module",
   "scripts": {
   "prebuild": "chmod +x node_modules/.bin/vite",
+<<<<<<< HEAD
   "build": "vite build"},
+=======
+  "build": "vite build"
+  },
+>>>>>>> 074fd2109858fbe73c92eb2118ffd565cb2a1e80
   "dependencies": {
     "@google/genai": "^2.4.0",
     "@tailwindcss/vite": "^4.1.14",
