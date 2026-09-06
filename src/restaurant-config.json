@@ -1,0 +1,33 @@
+{
+  "name": "RestoKu",
+  "tagline": "Authentic Asian & Local Fusion Street Food",
+  "description": "Authentic local flavors served fresh daily. Scan, order, and enjoy!",
+  "themeColor": "amber",
+  "layout": "sections",
+  "tableNumber": "12",
+  "currencySymbol": "Rp ",
+  "taxRate": 0.1,
+  "_instructions": "Edit this JSON file to customize your restaurant branding, theme, and layout. No user-side controls needed.",
+  "_availableThemeColors": {
+    "amber": "Warm Bistro Amber - Golden warm cream palette with amber accents",
+    "terracotta": "Tuscan Terracotta - Sunbaked red clay and trattoria warmth",
+    "emerald": "Matcha Zen Garden - Botanical emerald greens and tea house serenity",
+    "sapphire": "Ocean Sapphire - Coastal azure blues and crisp contrast",
+    "amethyst": "Velvet Plum & Wine - Rich berry and royal purple luxury",
+    "espresso": "Artisan Espresso Roast - Warm roasted mocha, hazelnut, and toasted oak",
+    "midnight": "Tokyo Midnight Noir - Deep noir night canvas with neon amber glow",
+    "monochrome": "Nordic Minimalist - High-contrast monochromatic gallery aesthetic",
+    "yellow": "Classic Sunny Yellow",
+    "red": "Spicy Chili Red",
+    "green": "Fresh Bistro Green",
+    "blue": "Cobalt Blue",
+    "purple": "Deep Violet Purple"
+  },
+  "_availableLayouts": {
+    "grid": "Photo Card Grid - Modern 2 to 4 column cards with 4:3 photography (best for cafes & bakeries)",
+    "sidebar": "Category Sidebar - Persistent left category drawer with live counters (best for izakayas & ramen bars)",
+    "compact": "Bistro Dense List - Clean horizontal rows with quick-order steppers (best for diners & large menus)",
+    "showcase": "Magazine Hero Showcase - Wide 16:9 hero photography with chef highlights (best for fine dining)",
+    "sections": "Categorized Continuous Flow - Continuous category sections with sticky jump bar (best for all-day dining)"
+  }
+}

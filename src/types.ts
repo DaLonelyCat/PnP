@@ -6,6 +6,9 @@ export interface MenuItem {
   image: string;
   category: string;
   popular?: boolean;
+  allergens?: string;
+  calories?: number;
+  macros?: string;
 }
 
 export interface CartItem {
@@ -26,3 +29,42 @@ export interface Order {
   tableNo: string;
   createdAt: Date;
 }
+
+export type ThemeColorTemplate = 
+  | 'yellow' | 'red' | 'green' | 'blue' | 'purple'
+  | 'amber' | 'terracotta' | 'emerald' | 'sapphire' | 'amethyst' 
+  | 'espresso' | 'midnight' | 'monochrome';
+
+export type MenuLayoutPattern = 
+  | 'grid' 
+  | 'sidebar' 
+  | 'compact' 
+  | 'showcase' 
+  | 'sections';
+
+export interface RestaurantConfig {
+  name: string;
+  description: string;
+  themeColor: ThemeColorTemplate;
+  layout: MenuLayoutPattern;
+  tagline?: string;
+  tableNumber?: string;
+  currencySymbol?: string;
+  taxRate?: number;
+}
+
+export interface RestaurantProfile {
+  name: string;
+  tagline?: string;
+  description?: string;
+  address?: string;
+  phone?: string;
+  instagram?: string;
+}
+
+export interface MenuDataJson {
+  restaurant: RestaurantProfile;
+  categories: string[];
+  items: MenuItem[];
+}
+

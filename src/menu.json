@@ -1,0 +1,285 @@
+{
+  "restaurant": {
+    "name": "RestoKu",
+    "tagline": "Authentic Asian & Local Fusion Street Food",
+    "description": "Authentic local flavors served fresh daily. Scan, order, and enjoy!",
+    "address": "Jl. Boulevard Raya No. 79, Jakarta",
+    "phone": "+62 812-3456-7890",
+    "instagram": "@restoku.official"
+  },
+  "categories": [
+    "All",
+    "Rice",
+    "Noodle",
+    "Chicken",
+    "Beef",
+    "Veggies",
+    "Drinks"
+  ],
+  "items": [
+    {
+      "id": "r1",
+      "name": "Nasi Goreng Spesial",
+      "description": "Wok-tossed Indonesian fried rice with shredded chicken, sunny-side-up egg, chicken satay, and crispy prawn crackers.",
+      "price": 48000,
+      "image": "https://images.unsplash.com/photo-1603133872878-684f208fb84b?q=80&w=800&auto=format&fit=crop",
+      "category": "Rice",
+      "popular": true,
+      "calories": 620,
+      "allergens": "Egg, Crustaceans"
+    },
+    {
+      "id": "r2",
+      "name": "Nasi Goreng Ikan Asin",
+      "description": "Aromatic fried rice tossed with crispy salted fish, leeks, garlic, and fresh bird's eye chili.",
+      "price": 45000,
+      "image": "https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=800&auto=format&fit=crop",
+      "category": "Rice",
+      "calories": 540,
+      "allergens": "Fish"
+    },
+    {
+      "id": "r3",
+      "name": "Japanese Curry Rice",
+      "description": "Rich, comforting golden Japanese curry with tender carrots, potatoes, and fluffy warm steamed rice.",
+      "price": 58000,
+      "image": "https://images.unsplash.com/photo-1605333396914-232151711200?q=80&w=800&auto=format&fit=crop",
+      "category": "Rice",
+      "calories": 590
+    },
+    {
+      "id": "r4",
+      "name": "Nasi Campur Bali",
+      "description": "Fragrant steamed rice served with shredded spiced chicken, sambal matah, green beans lawar, and boiled egg.",
+      "price": 52000,
+      "image": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=800&auto=format&fit=crop",
+      "category": "Rice",
+      "popular": true,
+      "calories": 610,
+      "allergens": "Egg"
+    },
+    {
+      "id": "n1",
+      "name": "Kwetiau Goreng Sapi 79",
+      "description": "Signature wok-charred flat rice noodles stir-fried with tender beef slices, egg, bean sprouts, and dark sweet soy.",
+      "price": 52000,
+      "image": "https://images.unsplash.com/photo-1585032226651-759b368d7246?q=80&w=800&auto=format&fit=crop",
+      "category": "Noodle",
+      "popular": true,
+      "calories": 680,
+      "allergens": "Egg, Soy"
+    },
+    {
+      "id": "n2",
+      "name": "Mie Goreng Jawa",
+      "description": "Traditional Javanese stir-fried egg noodles with shredded chicken, sweet cabbage, tomatoes, and aromatic garlic.",
+      "price": 42000,
+      "image": "https://images.unsplash.com/photo-1612927601601-6638404737ce?q=80&w=800&auto=format&fit=crop",
+      "category": "Noodle",
+      "calories": 590,
+      "allergens": "Gluten, Egg"
+    },
+    {
+      "id": "n3",
+      "name": "Bakmi Ayam Jamur",
+      "description": "Springy homemade egg noodles tossed with savory soy-braised chicken and shiitake mushrooms, served with clear broth.",
+      "price": 38000,
+      "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=800&auto=format&fit=crop",
+      "category": "Noodle",
+      "popular": true,
+      "calories": 510,
+      "allergens": "Gluten, Soy"
+    },
+    {
+      "id": "n4",
+      "name": "Spicy Beef Chili Ramen",
+      "description": "Rich slow-simmered savory broth with bouncy noodles, braised beef brisket, soft-boiled egg, and homemade chili oil.",
+      "price": 64000,
+      "image": "https://images.unsplash.com/photo-1552611052-33e04de081de?q=80&w=800&auto=format&fit=crop",
+      "category": "Noodle",
+      "calories": 720,
+      "allergens": "Gluten, Egg"
+    },
+    {
+      "id": "c1",
+      "name": "Ayam Goreng Bawang Putih",
+      "description": "Deep-fried golden chicken marinated in herbs and topped with crispy whole roasted garlic cloves and fresh cilantro.",
+      "price": 45000,
+      "image": "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=800&auto=format&fit=crop",
+      "category": "Chicken",
+      "popular": true,
+      "calories": 530
+    },
+    {
+      "id": "c2",
+      "name": "Chicken Tikka Masala",
+      "description": "Tender marinated chicken chunks simmered in a luscious creamy tomato and aromatic butter sauce.",
+      "price": 65000,
+      "image": "https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=800&auto=format&fit=crop",
+      "category": "Chicken",
+      "popular": true,
+      "calories": 640,
+      "allergens": "Dairy"
+    },
+    {
+      "id": "c3",
+      "name": "Ayam Cabe Garam",
+      "description": "Crisp bite-sized chicken tossed in a fiery wok with minced red chili, roasted garlic, spring onion, and sea salt.",
+      "price": 40000,
+      "image": "https://images.unsplash.com/photo-1564834724105-918b73d1b9e0?q=80&w=800&auto=format&fit=crop",
+      "category": "Chicken",
+      "calories": 460
+    },
+    {
+      "id": "c4",
+      "name": "Chicken Katsu Set",
+      "description": "Golden Japanese panko-breaded chicken cutlet with shredded cabbage, sesame dressing, and savory tonkatsu glaze.",
+      "price": 48000,
+      "image": "https://images.unsplash.com/photo-1593922756855-4428059e19d2?q=80&w=800&auto=format&fit=crop",
+      "category": "Chicken",
+      "calories": 570,
+      "allergens": "Gluten, Sesame"
+    },
+    {
+      "id": "c5",
+      "name": "Ayam Bakar Madu",
+      "description": "Char-grilled chicken thigh glazed with sweet blossom honey, lime, and rich caramelized dark soy sauce.",
+      "price": 46000,
+      "image": "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?q=80&w=800&auto=format&fit=crop",
+      "category": "Chicken",
+      "calories": 510,
+      "allergens": "Soy"
+    },
+    {
+      "id": "b1",
+      "name": "Rendang Daging Sapi Padang",
+      "description": "Tender beef shank slow-cooked for 6 hours in rich coconut milk and freshly ground Minang spices until caramelized.",
+      "price": 68000,
+      "image": "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop",
+      "category": "Beef",
+      "popular": true,
+      "calories": 670
+    },
+    {
+      "id": "b2",
+      "name": "Black Pepper Beef",
+      "description": "Tender beef strips wok-fried with crisp bell peppers, sweet onions, and a punchy crushed Sarawak black pepper sauce.",
+      "price": 62000,
+      "image": "https://images.unsplash.com/photo-1534939561126-855b8675edd7?q=80&w=800&auto=format&fit=crop",
+      "category": "Beef",
+      "calories": 540,
+      "allergens": "Soy"
+    },
+    {
+      "id": "b3",
+      "name": "Wagyu Beef Gyudon",
+      "description": "Thinly shaved premium beef and sweet caramelized onions simmered in savory dashi-mirin broth over rice with onsen egg.",
+      "price": 75000,
+      "image": "https://images.unsplash.com/photo-1551218808-94e220e084d2?q=80&w=800&auto=format&fit=crop",
+      "category": "Beef",
+      "popular": true,
+      "calories": 690,
+      "allergens": "Egg, Soy"
+    },
+    {
+      "id": "b4",
+      "name": "Rawon Daging Surabaya",
+      "description": "Traditional East Javanese black beef soup brewed with roasted kluwek nuts, served with salted duck egg and sambal.",
+      "price": 58000,
+      "image": "https://images.unsplash.com/photo-1548943487-a2e4e43b4859?q=80&w=800&auto=format&fit=crop",
+      "category": "Beef",
+      "calories": 510,
+      "allergens": "Egg"
+    },
+    {
+      "id": "v1",
+      "name": "Cah Kangkung Terasi",
+      "description": "Fresh water spinach quick-seared in high wok heat with fragrant fermented shrimp paste, red chili, and garlic.",
+      "price": 28000,
+      "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?q=80&w=800&auto=format&fit=crop",
+      "category": "Veggies",
+      "popular": true,
+      "calories": 180,
+      "allergens": "Crustaceans"
+    },
+    {
+      "id": "v2",
+      "name": "Tumis Tauge Ikan Asin",
+      "description": "Crisp bean sprouts stir-fried with crunchy salted fish morsels, leeks, and sliced red chili.",
+      "price": 26000,
+      "image": "https://images.unsplash.com/photo-1576045057995-568f588f82fb?q=80&w=800&auto=format&fit=crop",
+      "category": "Veggies",
+      "calories": 160,
+      "allergens": "Fish"
+    },
+    {
+      "id": "v3",
+      "name": "Capcay Seafood Kuah",
+      "description": "Colorful vegetable medley of crisp broccoli, sweet carrots, baby corn, and mushrooms braised in savory garlic broth.",
+      "price": 42000,
+      "image": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=800&auto=format&fit=crop",
+      "category": "Veggies",
+      "calories": 290,
+      "allergens": "Crustaceans"
+    },
+    {
+      "id": "v4",
+      "name": "Crispy Enoki Cabe Garam",
+      "description": "Golden tempura enoki mushrooms tossed with crispy garlic, chopped bird's eye chili, and toasted aromatic seasoning.",
+      "price": 30000,
+      "image": "https://images.unsplash.com/photo-1546549032-9571cd6b27df?q=80&w=800&auto=format&fit=crop",
+      "category": "Veggies",
+      "calories": 320,
+      "allergens": "Gluten"
+    },
+    {
+      "id": "d1",
+      "name": "Es Teh Manis Jasmine",
+      "description": "Chilled premium brewed loose-leaf jasmine tea served over ice with organic cane sugar.",
+      "price": 10000,
+      "image": "https://images.unsplash.com/photo-1556679343-c7306c1976bc?q=80&w=800&auto=format&fit=crop",
+      "category": "Drinks",
+      "calories": 80
+    },
+    {
+      "id": "d2",
+      "name": "Es Jeruk Peras Murni",
+      "description": "Freshly squeezed sweet Pontianak tangerines served chilled with crushed ice.",
+      "price": 18000,
+      "image": "https://images.unsplash.com/photo-1613478223719-2ab802602423?q=80&w=800&auto=format&fit=crop",
+      "category": "Drinks",
+      "popular": true,
+      "calories": 120
+    },
+    {
+      "id": "d3",
+      "name": "Iced Uji Matcha Latte",
+      "description": "Creamy ceremonial grade Japanese matcha whisked with fresh whole milk and lightly sweetened.",
+      "price": 32000,
+      "image": "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?q=80&w=800&auto=format&fit=crop",
+      "category": "Drinks",
+      "calories": 190,
+      "allergens": "Dairy"
+    },
+    {
+      "id": "d4",
+      "name": "Lychee Sparkling Cooler",
+      "description": "Refreshing sparkling soda infused with sweet lychee syrup, fresh mint sprigs, and real whole lychees.",
+      "price": 26000,
+      "image": "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=800&auto=format&fit=crop",
+      "category": "Drinks",
+      "popular": true,
+      "calories": 150
+    },
+    {
+      "id": "d5",
+      "name": "Es Cendol Gula Aren",
+      "description": "Traditional iced refreshment with pandan rice flour jelly, rich coconut milk, and smoky palm sugar syrup.",
+      "price": 24000,
+      "image": "https://images.unsplash.com/photo-1563227812-0ea4c22e6cc8?q=80&w=800&auto=format&fit=crop",
+      "category": "Drinks",
+      "calories": 270,
+      "allergens": "Coconut"
+    }
+  ]
+}
