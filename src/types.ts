@@ -1,3 +1,16 @@
+export interface CustomizationOption {
+  id: string;
+  name: string;
+  priceDelta: number; // 0 if free
+}
+
+export interface CustomizationGroup {
+  id: string;
+  name: string; // e.g., "Noodle Type", "Ice Level"
+  required: boolean;
+  options: CustomizationOption[];
+}
+
 export interface MenuItem {
   id: string;
   name: string;
@@ -9,6 +22,7 @@ export interface MenuItem {
   allergens?: string;
   calories?: number;
   macros?: string;
+  customizationGroups?: CustomizationGroup[];
 }
 
 export interface CartItem {
@@ -17,6 +31,7 @@ export interface CartItem {
   quantity: number;
   notes: string;
   spiceLevel?: number;
+  selectedOptions?: Record<string, CustomizationOption>; // GroupId -> Selected Option
 }
 
 export interface Order {

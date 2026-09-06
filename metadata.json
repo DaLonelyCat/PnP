@@ -1,6 +1,6 @@
 {
   "name": "RestoKu Menu & Ordering",
-  "description": "A mobile-first restaurant menu and ordering application with dark/light modes and cart functionality.",
+  "description": "A mobile-first restaurant menu and ordering application with customizable themes and cart functionality.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

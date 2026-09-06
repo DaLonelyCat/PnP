@@ -3,7 +3,7 @@
   "tagline": "Authentic Asian & Local Fusion Street Food",
   "description": "Authentic local flavors served fresh daily. Scan, order, and enjoy!",
   "themeColor": "amber",
-  "layout": "sections",
+  "layout": "grid",
   "tableNumber": "12",
   "currencySymbol": "Rp ",
   "taxRate": 0.1,
@@ -31,3 +31,4 @@
     "sections": "Categorized Continuous Flow - Continuous category sections with sticky jump bar (best for all-day dining)"
   }
 }
+

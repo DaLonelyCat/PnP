@@ -88,7 +88,31 @@
       "category": "Noodle",
       "popular": true,
       "calories": 510,
-      "allergens": "Gluten, Soy"
+      "allergens": "Gluten, Soy",
+      "customizationGroups": [
+        {
+          "id": "noodle_type",
+          "name": "Noodle Type",
+          "required": true,
+          "options": [
+            { "id": "egg_noodle", "name": "Egg Noodle (Standard)", "priceDelta": 0 },
+            { "id": "rice_noodle", "name": "Bihun (Rice Vermicelli)", "priceDelta": 0 },
+            { "id": "flat_noodle", "name": "Kwetiau (Flat Noodle)", "priceDelta": 2000 },
+            { "id": "shirataki", "name": "Shirataki (Low Carb)", "priceDelta": 8000 }
+          ]
+        },
+        {
+          "id": "extras",
+          "name": "Add-ons",
+          "required": false,
+          "options": [
+            { "id": "extra_chicken", "name": "Extra Braised Chicken", "priceDelta": 12000 },
+            { "id": "boiled_egg", "name": "Soy Boiled Egg", "priceDelta": 5000 },
+            { "id": "fried_wonton", "name": "Crispy Fried Wonton (2pcs)", "priceDelta": 8000 },
+            { "id": "meatballs", "name": "Beef Meatballs (2pcs)", "priceDelta": 10000 }
+          ]
+        }
+      ]
     },
     {
       "id": "n4",
@@ -259,7 +283,40 @@
       "image": "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?q=80&w=800&auto=format&fit=crop",
       "category": "Drinks",
       "calories": 190,
-      "allergens": "Dairy"
+      "allergens": "Dairy",
+      "customizationGroups": [
+        {
+          "id": "milk_type",
+          "name": "Milk Choice",
+          "required": true,
+          "options": [
+            { "id": "whole_milk", "name": "Whole Milk", "priceDelta": 0 },
+            { "id": "skim_milk", "name": "Skim Milk", "priceDelta": 0 },
+            { "id": "oat_milk", "name": "Oat Milk", "priceDelta": 5000 },
+            { "id": "soy_milk", "name": "Soy Milk", "priceDelta": 4000 }
+          ]
+        },
+        {
+          "id": "sweetness",
+          "name": "Sweetness Level",
+          "required": true,
+          "options": [
+            { "id": "100", "name": "Normal (100%)", "priceDelta": 0 },
+            { "id": "50", "name": "Less Sweet (50%)", "priceDelta": 0 },
+            { "id": "0", "name": "No Sugar (0%)", "priceDelta": 0 }
+          ]
+        },
+        {
+          "id": "ice_level",
+          "name": "Ice Level",
+          "required": true,
+          "options": [
+            { "id": "normal_ice", "name": "Normal Ice", "priceDelta": 0 },
+            { "id": "less_ice", "name": "Less Ice", "priceDelta": 0 },
+            { "id": "no_ice", "name": "No Ice", "priceDelta": 0 }
+          ]
+        }
+      ]
     },
     {
       "id": "d4",
