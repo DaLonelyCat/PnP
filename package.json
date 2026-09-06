@@ -4,11 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --port=6969 --host=0.0.0.0",
-    "build": "vite build",
-    "preview": "vite preview",
-    "clean": "rm -rf dist server.js",
-    "lint": "tsc --noEmit"
+  "prebuild": "chmod +x node_modules/.bin/vite",
+  "build": "vite build"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

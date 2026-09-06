@@ -5,18 +5,19 @@ import {
   ArrowLeft, 
   Plus, 
   Clock, 
-  ChefHat, 
   Receipt, 
   Utensils, 
   X, 
   Check,
   BellRing,
-  Cookie
+  CheckCircle2
 } from 'lucide-react';
 import { getThemeClasses } from '../utils/theme';
+import { Language, useTranslation } from '../utils/i18n';
 
 interface OrderConfirmedProps {
   config: RestaurantConfig;
+  lang: Language;
   order: Order;
   onBack: () => void;
   onRequestBill: () => void;
@@ -24,10 +25,12 @@ interface OrderConfirmedProps {
 
 export default function OrderConfirmed({ 
   config, 
+  lang,
   order, 
   onBack, 
   onRequestBill 
 }: OrderConfirmedProps) {
+  const t = useTranslation(lang);
   const [isBillModalOpen, setIsBillModalOpen] = useState(false);
 
   const totalItems = order.items.reduce((sum, item) => sum + item.quantity, 0);
@@ -75,49 +78,24 @@ export default function OrderConfirmed({
 
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-5 space-y-4">
         
-        {/* Order Status & Progress Card */}
-        <div className="bg-white dark:bg-zinc-800 rounded-2xl p-4 sm:p-5 shadow-xs space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
-              </div>
-              <span className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">
-                Kitchen Preparing
-              </span>
-            </div>
-            <span className="text-xs font-semibold text-gray-500 dark:text-zinc-400 flex items-center gap-1">
-              <Clock size={13} />
+        {/* Thank You for Ordering Card */}
+        <div className="bg-white dark:bg-zinc-800 rounded-2xl p-5 sm:p-6 shadow-xs border border-gray-100 dark:border-zinc-700/60 text-center space-y-2">
+          <div className={`w-12 h-12 rounded-2xl ${theme.light} ${theme.text} mx-auto flex items-center justify-center shadow-xs`}>
+            <CheckCircle2 size={26} strokeWidth={2.2} />
+          </div>
+          <h2 className="text-lg sm:text-xl font-black text-gray-900 dark:text-white">
+            Thank You for Your Order!
+          </h2>
+          <p className="text-xs text-gray-500 dark:text-zinc-400 max-w-sm mx-auto leading-relaxed">
+            We have received your order for <strong className="text-gray-800 dark:text-zinc-200">{order.tableNo}</strong>. Your food and drinks are being freshly prepared for you.
+          </p>
+          <div className="inline-flex items-center gap-3 pt-2 text-xs text-gray-500 dark:text-zinc-400">
+            <span className="font-semibold text-gray-700 dark:text-zinc-300">Order #{order.id}</span>
+            <span>•</span>
+            <span className="flex items-center gap-1">
+              <Clock size={12} />
               Placed at {formatOrderTime(order.createdAt)}
             </span>
-          </div>
-
-          {/* Stepper */}
-          <div className="grid grid-cols-3 gap-2 pt-1">
-            <div className="flex flex-col items-center text-center">
-              <div className="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold mb-1 shadow-xs">
-                <Check size={16} strokeWidth={2.5} />
-              </div>
-              <span className="text-[11px] font-bold text-gray-900 dark:text-white">Received</span>
-              <span className="text-[9px] text-gray-400">Order confirmed</span>
-            </div>
-
-            <div className="flex flex-col items-center text-center">
-              <div className={`w-8 h-8 rounded-full ${theme.primary} ${theme.buttonText} flex items-center justify-center text-xs font-bold mb-1 shadow-xs ring-4 ring-amber-400/20 dark:ring-amber-500/20`}>
-                <ChefHat size={16} />
-              </div>
-              <span className="text-[11px] font-bold text-gray-900 dark:text-white">Cooking</span>
-              <span className="text-[9px] text-amber-600 dark:text-amber-400 font-medium">In the kitchen</span>
-            </div>
-
-            <div className="flex flex-col items-center text-center">
-              <div className="w-8 h-8 rounded-full bg-gray-100 dark:bg-zinc-700 text-gray-400 dark:text-zinc-500 flex items-center justify-center text-xs font-bold mb-1">
-                <Utensils size={15} />
-              </div>
-              <span className="text-[11px] font-medium text-gray-400 dark:text-zinc-500">Serving</span>
-              <span className="text-[9px] text-gray-400 dark:text-zinc-500">To your table</span>
-            </div>
           </div>
         </div>
 
@@ -196,7 +174,7 @@ export default function OrderConfirmed({
 
         {/* Bill Summary */}
         <div className="bg-white dark:bg-zinc-800 rounded-2xl p-4 sm:p-5 shadow-xs space-y-2.5">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center mb-2">
             <span className="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-zinc-500">
               Bill Summary
             </span>
@@ -218,6 +196,21 @@ export default function OrderConfirmed({
             <span className={`text-base font-extrabold ${theme.text}`}>
               {formatCurrency(order.total)}
             </span>
+          </div>
+
+          <div className="pt-3">
+            <button 
+              onClick={() => {
+                const text = `RestoKu Order Receipt\nID: ${order.id}\nTable: ${order.tableNo}\n\n` +
+                  order.items.map(item => `${item.quantity}x ${item.menuItem.name}`).join('\n') +
+                  `\n\nTotal: ${formatCurrency(order.total)}`;
+                navigator.clipboard.writeText(text);
+                alert("Receipt copied to clipboard!");
+              }}
+              className="w-full text-xs font-semibold py-2 px-3 rounded-xl border border-gray-200 dark:border-zinc-700 text-gray-600 dark:text-zinc-300 hover:bg-gray-50 dark:hover:bg-zinc-700/50 transition-colors"
+            >
+              Copy Digital Receipt
+            </button>
           </div>
         </div>
 
@@ -267,7 +260,7 @@ export default function OrderConfirmed({
             </div>
 
             <p className="text-xs text-gray-500 dark:text-zinc-400 leading-relaxed">
-              Confirming will notify our floor staff to bring the printed receipt to <strong>{order.tableNo}</strong> for payment, conclude your order, and automatically clear your browser cookies and table session.
+              Confirming will notify our floor staff to bring the printed receipt to <strong>{order.tableNo}</strong> for payment and conclude your table session.
             </p>
 
             {/* Reconfirmation Summary Card */}
@@ -289,8 +282,8 @@ export default function OrderConfirmed({
                 </span>
               </div>
               <div className="flex items-center gap-1.5 pt-2 border-t border-gray-200/70 dark:border-zinc-600 text-[11px] text-gray-500 dark:text-zinc-400">
-                <Cookie size={13} className="text-amber-500 shrink-0" />
-                <span>Auto-finishes order and clears browser cookies.</span>
+                <Check size={13} className="text-emerald-500 shrink-0" />
+                <span>Our staff will bring the printed bill directly to your table.</span>
               </div>
             </div>
 

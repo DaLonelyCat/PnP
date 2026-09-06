@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { MenuItem, RestaurantConfig } from '../types';
 import { formatCurrency } from '../data';
 import { getThemeClasses } from '../utils/theme';
+import { Language, useTranslation } from '../utils/i18n';
 import { 
   Plus, 
   Instagram, 
@@ -21,6 +22,7 @@ import {
 
 interface MenuListProps {
   config: RestaurantConfig;
+  lang: Language;
   categories: string[];
   activeCategory: string;
   setActiveCategory: (cat: string) => void;
@@ -30,12 +32,14 @@ interface MenuListProps {
 
 export default function MenuList({ 
   config, 
+  lang,
   categories, 
   activeCategory, 
   setActiveCategory, 
   items, 
   onItemClick 
 }: MenuListProps) {
+  const t = useTranslation(lang);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOption, setSortOption] = useState<'default' | 'price-asc' | 'price-desc' | 'popular'>('default');
   const [isSortOpen, setIsSortOpen] = useState(false);
@@ -79,14 +83,14 @@ export default function MenuList({
 
   // Common Search & Sort Component
   const renderSearchAndSort = (extraClass = "px-4 sm:px-6 mb-3") => (
-    <div className={`${extraClass} flex gap-2.5 relative`}>
+    <div className={`${extraClass} flex gap-2.5 relative ${isSortOpen ? 'z-50' : 'z-20'}`}>
       <div className={`flex-1 ${theme.cardClass} rounded-2xl h-12 flex items-center px-4 gap-2.5 shadow-xs border ${theme.cardBorder} focus-within:ring-2 focus-within:ring-gray-300 dark:focus-within:ring-zinc-600 transition-all`}>
         <Search size={18} className="text-gray-400 shrink-0" />
         <input 
           type="text" 
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search dishes, drinks, ingredients..."
+          placeholder={t('searchPlaceholder')}
           className="flex-1 w-full bg-transparent border-none outline-none text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-zinc-500"
         />
         {searchQuery && (
@@ -101,17 +105,19 @@ export default function MenuList({
       </div>
       
       {/* Sort Dropdown */}
-      <div className="relative shrink-0">
+      <div className={`relative shrink-0 ${isSortOpen ? 'z-50' : 'z-10'}`}>
         <button
           type="button"
           onClick={() => setIsSortOpen(!isSortOpen)}
-          className={`h-12 px-3.5 rounded-2xl ${theme.cardClass} border ${theme.cardBorder} flex items-center gap-2 shadow-xs text-xs font-semibold transition-all hover:bg-gray-50 dark:hover:bg-zinc-700/60 cursor-pointer ${
-            sortOption !== 'default' 
-              ? `${theme.text} font-bold` 
-              : 'text-gray-700 dark:text-zinc-200'
+          className={`h-12 px-3.5 rounded-2xl border flex items-center gap-2 shadow-xs text-xs font-semibold transition-all cursor-pointer relative z-10 select-none ${
+            sortOption !== 'default'
+              ? `${theme.primary} ${theme.btnText} ${theme.border} shadow-sm font-bold`
+              : isSortOpen
+                ? `${theme.light} ${theme.border} ${theme.text} font-bold ring-2 ring-black/10 dark:ring-white/10 shadow-xs`
+                : `${theme.cardClass} ${theme.cardBorder} text-gray-700 dark:text-zinc-200 hover:opacity-85`
           }`}
         >
-          <ArrowUpDown size={14} className={sortOption !== 'default' ? theme.text : 'text-gray-400'} />
+          <ArrowUpDown size={14} className={sortOption !== 'default' ? theme.btnText : isSortOpen ? theme.text : 'text-gray-400 dark:text-zinc-500'} />
           <span>
             {sortOption === 'default' ? 'Sort' : sortOption === 'popular' ? 'Popular' : sortOption === 'price-asc' ? 'Price ↑' : 'Price ↓'}
           </span>
@@ -120,11 +126,11 @@ export default function MenuList({
         {isSortOpen && (
           <>
             <div 
-              className="fixed inset-0 z-20" 
+              className="fixed inset-0 z-40 bg-black/20 backdrop-blur-[1px]" 
               onClick={() => setIsSortOpen(false)} 
             />
-            <div className={`absolute right-0 top-14 z-30 w-48 ${theme.cardClass} rounded-2xl shadow-xl border ${theme.cardBorder} p-1.5 animate-in fade-in zoom-in-95 duration-100`}>
-              <div className="text-[10px] uppercase tracking-wider font-bold text-gray-400 dark:text-zinc-500 px-3 py-1.5">
+            <div className={`absolute right-0 top-full mt-2 z-50 w-52 ${theme.cardClass} rounded-2xl shadow-2xl border ${theme.cardBorder} p-1.5 animate-in fade-in zoom-in-95 duration-100 ring-1 ring-black/5`}>
+              <div className={`text-[10px] uppercase tracking-wider font-bold ${theme.text} px-3 py-1.5 opacity-90`}>
                 Sort Dishes
               </div>
               {[
@@ -142,14 +148,14 @@ export default function MenuList({
                       setSortOption(option.value as any);
                       setIsSortOpen(false);
                     }}
-                    className={`w-full flex items-center justify-between px-3 py-2 text-xs font-semibold rounded-xl transition-colors text-left cursor-pointer ${
+                    className={`w-full flex items-center justify-between px-3 py-2 text-xs font-semibold rounded-xl transition-all text-left cursor-pointer ${
                       isSelected 
-                        ? `${theme.light} ${theme.text}` 
-                        : 'text-gray-700 dark:text-zinc-200 hover:bg-gray-100 dark:hover:bg-zinc-700/60'
+                        ? `${theme.primary} ${theme.btnText} font-bold shadow-xs` 
+                        : 'text-gray-700 dark:text-zinc-200 hover:bg-black/5 dark:hover:bg-white/5'
                     }`}
                   >
                     <span>{option.label}</span>
-                    {isSelected && <Check size={14} className={theme.text} />}
+                    {isSelected && <Check size={14} className={theme.btnText} strokeWidth={2.5} />}
                   </button>
                 );
               })}
@@ -303,7 +309,7 @@ export default function MenuList({
                   />
                   {item.popular && (
                     <span className="absolute top-1.5 left-1.5 bg-black/65 dark:bg-black/75 backdrop-blur-md text-amber-300 text-[9px] font-bold px-1.5 py-0.5 rounded-full flex items-center gap-1 shadow-xs">
-                      <Flame size={10} className="fill-amber-400 text-amber-400" /> Pop
+                      <Flame size={10} className="fill-amber-400 text-amber-400" /> Populer
                     </span>
                   )}
                   {item.calories && (
@@ -638,7 +644,7 @@ export default function MenuList({
                         />
                         {item.popular && (
                           <span className="absolute top-2 left-2 bg-black/60 dark:bg-black/75 backdrop-blur-md text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 shadow-xs">
-                            <Flame size={11} className="fill-amber-400 text-amber-400" /> Pop
+                            <Flame size={11} className="fill-amber-400 text-amber-400" /> Populer
                           </span>
                         )}
                       </div>

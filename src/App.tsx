@@ -3,28 +3,36 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect } from 'react';
-import { ShoppingCart, Info, Receipt, CheckCircle2, X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ShoppingCart, Info, Receipt, CheckCircle2, X, SlidersHorizontal, Globe } from 'lucide-react';
 import { MENU_ITEMS as initialMenuItems, CATEGORIES as initialCategories, RESTAURANT_PROFILE } from './data';
 import { MenuItem, CartItem, Order, RestaurantConfig } from './types';
 import appConfig from './restaurant-config.json';
 import { getThemeClasses } from './utils/theme';
 import { clearOrderSession } from './utils/storage';
+import { Language, useTranslation } from './utils/i18n';
 
 // Components
 import MenuList from './components/MenuList';
 import ItemDetail from './components/ItemDetail';
 import CartView from './components/CartView';
 import OrderConfirmed from './components/OrderConfirmed';
+import SettingsModal from './components/SettingsModal';
+import PinModal from './components/PinModal';
 
 type ViewState = 'menu' | 'detail' | 'cart' | 'order';
 
 export default function App() {
   const [view, setView] = useState<ViewState>('menu');
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [lang, setLang] = useState<Language>('en');
+  const t = useTranslation(lang);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isPinModalOpen, setIsPinModalOpen] = useState(false);
+  const [pinInput, setPinInput] = useState('');
+  const [pinError, setPinError] = useState(false);
   
-  // Restaurant configuration loaded directly from restaurant-config.json and menu.json
-  const config: RestaurantConfig = {
+  // Restaurant configuration defaults loaded from restaurant-config.json and menu.json
+  const defaultConfig: RestaurantConfig = {
     name: RESTAURANT_PROFILE.name || (appConfig as any).name || 'RestoKu',
     tagline: RESTAURANT_PROFILE.tagline || (appConfig as any).tagline || '',
     description: RESTAURANT_PROFILE.description || (appConfig as any).description || '',
@@ -35,8 +43,43 @@ export default function App() {
     taxRate: (appConfig as any).taxRate ?? 0.1,
   };
 
-  const [menuItems, setMenuItems] = useState<MenuItem[]>(initialMenuItems);
-  const [categories, setCategories] = useState<string[]>(initialCategories);
+  // State with temporary local persistence
+  const [config, setConfig] = useState<RestaurantConfig>(() => {
+    const saved = localStorage.getItem('restoku_temp_custom_config');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        // ignore
+      }
+    }
+    return defaultConfig;
+  });
+
+  const [menuItems, setMenuItems] = useState<MenuItem[]>(() => {
+    const saved = localStorage.getItem('restoku_temp_menu_items_v3');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        // ignore
+      }
+    }
+    return initialMenuItems;
+  });
+
+  const [categories, setCategories] = useState<string[]>(() => {
+    const saved = localStorage.getItem('restoku_temp_categories_v3');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        // ignore
+      }
+    }
+    return initialCategories;
+  });
+
   const [noticeMessage, setNoticeMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -45,12 +88,70 @@ export default function App() {
       return () => clearTimeout(timer);
     }
   }, [noticeMessage]);
-  
-  // Clean up any previous client-side config override so config JSON always prevails
+
+  // Persist temporary modifications across reloads
   useEffect(() => {
-    localStorage.removeItem('restoku_custom_config');
+    localStorage.setItem('restoku_temp_custom_config', JSON.stringify(config));
+  }, [config]);
+
+  useEffect(() => {
+    localStorage.setItem('restoku_temp_menu_items_v3', JSON.stringify(menuItems));
+  }, [menuItems]);
+
+  useEffect(() => {
+    localStorage.setItem('restoku_temp_categories_v3', JSON.stringify(categories));
+  }, [categories]);
+
+  // Session Inactivity Timeout (90 minutes)
+  useEffect(() => {
+    let inactivityTimer: number;
+    const resetTimer = () => {
+      clearTimeout(inactivityTimer);
+      // Set timeout for 90 minutes (90 * 60 * 1000)
+      inactivityTimer = window.setTimeout(() => {
+        setCart([]);
+        setActiveOrder(null);
+        setView('menu');
+        setNoticeMessage("Session expired due to inactivity.");
+      }, 90 * 60 * 1000);
+    };
+
+    // Events to track user activity
+    const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
+    events.forEach(event => document.addEventListener(event, resetTimer, { passive: true }));
+    
+    resetTimer(); // Initialize on mount
+
+    return () => {
+      clearTimeout(inactivityTimer);
+      events.forEach(event => document.removeEventListener(event, resetTimer));
+    };
   }, []);
+
+  const handleResetToDefaults = () => {
+    localStorage.removeItem('restoku_temp_custom_config');
+    localStorage.removeItem('restoku_temp_menu_items');
+    localStorage.removeItem('restoku_temp_categories');
+    setConfig(defaultConfig);
+    setMenuItems(initialMenuItems);
+    setCategories(initialCategories);
+    setNoticeMessage('Reset theme, layout, naming, and menu back to configuration files.');
+    setIsSettingsOpen(false);
+  };
   
+  const handlePinSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (pinInput === '1234') {
+      setIsPinModalOpen(false);
+      setIsSettingsOpen(true);
+      setPinInput('');
+      setPinError(false);
+    } else {
+      setPinError(true);
+      setPinInput('');
+    }
+  };
+
   // Shopping State
   const [cart, setCart] = useState<CartItem[]>(() => {
     const saved = localStorage.getItem('restoku_cart');
@@ -81,21 +182,42 @@ export default function App() {
     }
   }, [activeOrder]);
   
-  // Theme Toggle Effect
+  // Ensure dark mode class is cleaned up
   useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [isDarkMode]);
+    document.documentElement.classList.remove('dark');
+  }, []);
 
-  const toggleTheme = () => setIsDarkMode(!isDarkMode);
+  // Ensure settings modal automatically closes if screen is resized below desktop breakpoint (1024px)
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1024) {
+        setIsSettingsOpen(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Cart Actions
-  const addToCart = (menuItem: MenuItem, quantity: number, notes: string = '', spiceLevel: number = 0) => {
+  const addToCart = (menuItem: MenuItem, quantity: number, notes: string = '', spiceLevel: number = 0, selectedOptions?: Record<string, any>) => {
     setCart(prev => {
-      const existing = prev.find(item => item.menuItem.id === menuItem.id && item.notes === notes && item.spiceLevel === spiceLevel);
+      const existing = prev.find(item => {
+        if (item.menuItem.id !== menuItem.id) return false;
+        if (item.notes !== notes) return false;
+        if (item.spiceLevel !== spiceLevel) return false;
+        
+        const currentOpts = item.selectedOptions || {};
+        const newOpts = selectedOptions || {};
+        const currentKeys = Object.keys(currentOpts);
+        const newKeys = Object.keys(newOpts);
+        
+        if (currentKeys.length !== newKeys.length) return false;
+        for (const key of currentKeys) {
+          if (currentOpts[key].id !== newOpts[key]?.id) return false;
+        }
+        
+        return true;
+      });
       if (existing) {
         return prev.map(item => 
           item.id === existing.id 
@@ -108,7 +230,8 @@ export default function App() {
         menuItem,
         quantity,
         notes,
-        spiceLevel
+        spiceLevel,
+        selectedOptions
       }];
     });
   };
@@ -117,25 +240,49 @@ export default function App() {
     setCart(prev => prev.map(item => {
       if (item.id === id) {
         const newQ = item.quantity + delta;
-        return newQ > 0 ? { ...item, quantity: newQ } : item;
+        return { ...item, quantity: newQ };
       }
       return item;
     }).filter(item => item.quantity > 0));
   };
 
+  const removeFromCart = (id: string) => {
+    setCart(prev => prev.filter(item => item.id !== id));
+  };
+
   const clearCart = () => setCart([]);
 
+  const computeCartItemPrice = (item: CartItem) => {
+    let price = item.menuItem.price;
+    if (item.selectedOptions) {
+      Object.values(item.selectedOptions).forEach((opt: any) => {
+        price += (opt.priceDelta || 0);
+      });
+    }
+    return price;
+  };
+
   const placeOrder = (tableNo: string) => {
-    const newSubtotal = cart.reduce((sum, item) => sum + (item.menuItem.price * item.quantity), 0);
+    const newSubtotal = cart.reduce((sum, item) => sum + (computeCartItemPrice(item) * item.quantity), 0);
     
     if (activeOrder) {
       const mergedItems = [...activeOrder.items];
       cart.forEach(cartItem => {
-        const existing = mergedItems.find(i => 
-          i.menuItem.id === cartItem.menuItem.id && 
-          i.notes === cartItem.notes && 
-          i.spiceLevel === cartItem.spiceLevel
-        );
+        const existing = mergedItems.find(i => {
+          if (i.menuItem.id !== cartItem.menuItem.id) return false;
+          if (i.notes !== cartItem.notes) return false;
+          if (i.spiceLevel !== cartItem.spiceLevel) return false;
+          
+          const currentOpts = i.selectedOptions || {};
+          const newOpts = cartItem.selectedOptions || {};
+          const currentKeys = Object.keys(currentOpts);
+          const newKeys = Object.keys(newOpts);
+          if (currentKeys.length !== newKeys.length) return false;
+          for (const key of currentKeys) {
+            if (currentOpts[key].id !== newOpts[key]?.id) return false;
+          }
+          return true;
+        });
         if (existing) {
           existing.quantity += cartItem.quantity;
         } else {
@@ -201,6 +348,32 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-2">
+            {/* Language Toggle */}
+            <button
+              onClick={() => setLang(l => l === 'en' ? 'id' : 'en')}
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-2xl ${theme.light} border ${theme.cardBorder} ${theme.text} hover:opacity-85 transition-opacity cursor-pointer text-xs font-bold shadow-xs`}
+              title="Toggle Language"
+            >
+              <Globe size={15} className={theme.text} />
+              <span className="uppercase">{lang}</span>
+            </button>
+
+            {/* Theming options - available only in desktop view (hidden on mobile and tablet) */}
+            <button
+              onClick={() => {
+                if (window.innerWidth >= 1024) {
+                  setIsPinModalOpen(true);
+                  setPinInput('');
+                  setPinError(false);
+                }
+              }}
+              className={`hidden lg:inline-flex px-3 py-2 rounded-2xl ${theme.light} border ${theme.cardBorder} ${theme.text} hover:opacity-85 transition-opacity cursor-pointer items-center gap-1.5 text-xs font-bold shadow-xs`}
+              title="Customize theme, layouts, naming and menu (Desktop only)"
+            >
+              <SlidersHorizontal size={15} className={theme.text} />
+              <span>Theme & Menu</span>
+            </button>
+
             <button 
               onClick={() => setView('cart')}
               className="relative p-2.5 rounded-2xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:opacity-85 transition-opacity cursor-pointer"
@@ -222,6 +395,7 @@ export default function App() {
         {view === 'menu' && (
           <MenuList 
             config={config}
+            lang={lang}
             categories={categories}
             activeCategory={activeCategory}
             setActiveCategory={setActiveCategory}
@@ -233,6 +407,7 @@ export default function App() {
         {view === 'detail' && selectedItem && (
           <ItemDetail 
             config={config}
+            lang={lang}
             item={selectedItem} 
             onBack={() => setView('menu')}
             onAddToCart={(qty, notes, spice) => {
@@ -245,11 +420,13 @@ export default function App() {
         {view === 'cart' && (
           <CartView 
             config={config}
+            lang={lang}
             cart={cart}
             activeTableNo={activeOrder?.tableNo}
             activeOrderId={activeOrder?.id}
             onBack={() => setView('menu')}
             onUpdateQuantity={updateQuantity}
+            onRemoveItem={removeFromCart}
             onPlaceOrder={placeOrder}
           />
         )}
@@ -258,13 +435,14 @@ export default function App() {
           activeOrder ? (
             <OrderConfirmed 
               config={config}
+              lang={lang}
               order={activeOrder}
               onBack={() => setView('menu')}
               onRequestBill={() => {
                 clearOrderSession();
                 setActiveOrder(null);
                 setCart([]);
-                setNoticeMessage('Bill requested! Order completed and browser cookies cleared.');
+                setNoticeMessage('Bill requested! Order completed. Thank you for dining with us!');
                 setView('menu');
               }}
             />
@@ -301,10 +479,10 @@ export default function App() {
       
       {/* Floating Bottom Nav */}
       {view === 'menu' && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-white/95 dark:bg-zinc-800/95 backdrop-blur-md shadow-xl rounded-full px-6 py-2.5 flex items-center gap-7 border border-gray-200/60 dark:border-zinc-700/60 z-30">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-white/95 dark:bg-zinc-800/95 backdrop-blur-md shadow-xl rounded-full px-6 py-2.5 flex items-center gap-6 sm:gap-7 border border-gray-200/60 dark:border-zinc-700/60 z-30">
           <button className={`flex flex-col items-center gap-0.5 ${theme.text} cursor-pointer`}>
             <Info size={18} />
-            <span className="text-[10px] font-bold">Menu</span>
+            <span className="text-[10px] font-bold">{t('menu')}</span>
           </button>
 
           <button 
@@ -319,24 +497,52 @@ export default function App() {
                 </span>
               )}
             </div>
-            <span className="text-[10px] font-medium">Cart</span>
+            <span className="text-[10px] font-medium">{t('cart')}</span>
           </button>
 
           {activeOrder && (
             <button 
               onClick={() => setView('order')}
-              className="flex flex-col items-center gap-0.5 text-amber-600 dark:text-amber-400 font-bold transition-colors cursor-pointer"
+              className={`flex flex-col items-center gap-0.5 ${theme.text} font-bold transition-colors cursor-pointer`}
               title={`Active Order #${activeOrder.id}`}
             >
               <div className="relative">
                 <Receipt size={18} />
-                <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                <span className={`absolute -top-1 -right-1 w-2 h-2 rounded-full ${theme.primary} animate-pulse`} />
               </div>
               <span className="text-[10px] font-bold">#{activeOrder.id}</span>
             </button>
           )}
         </div>
       )}
+
+      {/* Live Customizer & Settings Modal */}
+      <PinModal
+        isOpen={isPinModalOpen}
+        onClose={() => {
+          setIsPinModalOpen(false);
+          setPinInput('');
+          setPinError(false);
+        }}
+        config={config}
+        pinInput={pinInput}
+        setPinInput={setPinInput}
+        pinError={pinError}
+        onSubmit={handlePinSubmit}
+      />
+
+      <SettingsModal
+        lang={lang}
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        config={config}
+        onUpdateConfig={setConfig}
+        menuItems={menuItems}
+        onUpdateMenuItems={setMenuItems}
+        categories={categories}
+        onUpdateCategories={setCategories}
+        onResetToDefaults={handleResetToDefaults}
+      />
     </div>
   );
 }
