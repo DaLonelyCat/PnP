@@ -4,13 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-  "prebuild": "chmod +x node_modules/.bin/vite",
-<<<<<<< HEAD
-  "build": "vite build"},
-=======
-  "build": "vite build"
+    "prebuild": "chmod +x node_modules/.bin/vite",
+    "dev": "vite --port=3000 --host=0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview",
+    "clean": "rm -rf dist server.js",
+    "lint": "tsc --noEmit"
   },
->>>>>>> 074fd2109858fbe73c92eb2118ffd565cb2a1e80
   "dependencies": {
     "@google/genai": "^2.4.0",
     "@tailwindcss/vite": "^4.1.14",
